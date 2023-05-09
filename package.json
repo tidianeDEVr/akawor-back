@@ -1,0 +1,21 @@
+{
+  "name": "akawor-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "mysql2": "^3.2.1",
+    "nodemon": "^2.0.22",
+    "path": "^0.12.7",
+    "sequelize": "^6.31.0",
+    "sequelize-cli": "^6.6.0"
+  }
+}
