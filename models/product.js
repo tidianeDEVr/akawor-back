@@ -50,6 +50,14 @@ module.exports = (sequelize, DataTypes) => {
             },
             as: 'boosts'
         });
+
+        product.belongsTo(models.category, {
+            foreignKey: {
+              name: 'shopId',
+              allowNull: false
+            },
+            as: 'category'
+        });
     };
 
     return product; 
