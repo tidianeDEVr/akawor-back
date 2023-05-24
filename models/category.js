@@ -21,6 +21,12 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
+        categoryIconClass: {
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: true
+            }
+        },
     },
     {
         paranoid: true

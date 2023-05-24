@@ -29,7 +29,22 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
+        userIsEmailVerified: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
+        },
         userPassword: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
+        },
+        userSalt: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
@@ -38,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         userPhoneNumber: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
             validate: {
                 notEmpty: true
             }

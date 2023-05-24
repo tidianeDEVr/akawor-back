@@ -2,26 +2,6 @@ const express = require('express')
 const router = express.Router()
 const { user } = require('../models/')
 
-// INSCRIPTION
-router.get('/register', async (req, res) => {
-    user.create({
-        userFirstName: "Cheikh Tidiane",
-        userLastName: "Ndiaye",
-        userEmail: "godex@gmail.com",
-        userPassword: "mycomplexxpassword",
-        userPhoneNumber: 782141278,
-        userBirthday: new Date(), 
-    }).catch((err) => {
-        if(err) console.log(err);
-    })
-    res.send({status: 'Registered successfully',})
-})
-
-// CONNEXION
-router.post('/login', async (req, res) => {
-    res.send('loggin')
-})
-
 // FIND ALL
 router.get('/find-all', async (req, res) => {
     user.findAll({
