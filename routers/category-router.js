@@ -89,9 +89,63 @@ const categoriesShopsFixtures = [
     icon: 'fa-solid fa-person-swimming'
   },
 ]
+const subCategoriesProductsFixtures = [
+  {
+    categoryLibelle: 'Accessoires',
+    categoryIconClass: '',
+    parent: 2
+  },
+  {
+    categoryLibelle: 'Robes',
+    categoryIconClass: '',
+    parent: 2
+  },
+  {
+    categoryLibelle: 'Pantalons',
+    categoryIconClass: '',
+    parent: 2
+  },
+  {
+    categoryLibelle: 'T-Shirts',
+    categoryIconClass: '',
+    parent: 2
+  },
+  {
+    categoryLibelle: 'Ordinateurs de bureau',
+    categoryIconClass: '',
+    parent: 7
+  },
+  {
+    categoryLibelle: 'Ordinateurs portables',
+    categoryIconClass: '',
+    parent: 7
+  },
+  {
+    categoryLibelle: 'Composants',
+    categoryIconClass: '',
+    parent: 7
+  },
+  {
+    categoryLibelle: 'Téléphones',
+    categoryIconClass: '',
+    parent: 7
+  },
+]
 
 
 // INSERT
+router.get('/fixtures-sub-produits', async(req, res) => {
+  subCategoriesProductsFixtures.forEach((cat)=>{
+    let categ = new category()
+    categ.categoryParentId = cat.parent
+    categ.categoryLibelle = cat.categoryLibelle
+    categ.save().catch((err) => {
+      console.log(err);
+      return res.status(500).send(err);
+    });
+  })
+  res.send('ok')
+})
 router.get('/fixtures-produits', async(req, res) => {
   categoriesProductsFixtures.forEach((cat)=>{
     let categ = new category()
@@ -134,7 +188,8 @@ router.get('/find-all/:type', async (req, res) => {
     const type = req.params.type
     category.findAll({
       where: {
-        categoryType: type
+        categoryType: type,
+        categoryParentId: null
       }
     })
     .then((categories) => {
@@ -147,6 +202,18 @@ router.get('/find-all/:type', async (req, res) => {
     .catch((error) => {
         return res.status(400).json(error)
     });
+})
+// FIND SUBCATEGORIES
+router.get('/find-subs/:parent', async (req, res)=>{
+  let subCategories = []
+  const parent = req.params.parent
+  category.findAll({where: { categoryParentId: parent }})
+  .then((categories)=>{
+    res.send(categories)
+  })
+  .catch((err)=>{
+    res.status(500).send({message: 'An error occur ! Try again later'})
+  })
 })
 
 // FIND BY ID

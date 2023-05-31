@@ -8,12 +8,12 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
-        categoryParent: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: true
-            }
-        },
+        // categoryParentId: {
+        //     type: DataTypes.STRING,
+        //     validate: {
+        //         notEmpty: true
+        //     }
+        // },
         categoryType: {
             type: DataTypes.STRING,
             defaultValue: "product",
@@ -46,6 +46,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
           },
           as: 'products'
+        });
+        category.hasOne(models.category, {
+          foreignKey: {
+            name: 'categoryParentId',
+            allowNull: true
+          },
         });
     };
     

@@ -29,6 +29,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(cors({credentials: true, origin: ['http://localhost:4200'],}))
 app.use(helmet())
 app.use(cookieParser())
+app.use(express.static('public'));
 
 // ROUTES
 app.use('/api/boost', boostRouter)
