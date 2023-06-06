@@ -15,6 +15,13 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
+        userRole: {
+            type: DataTypes.STRING,
+            defaultValue: 'ROLE_CLIENT',
+            validate: {
+                notEmpty: true
+            }
+        },
         userBirthday: {
             type: DataTypes.DATE,
             allowNull: true,
@@ -57,7 +64,15 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 notEmpty: true
             }
-        }
+        },
+        userIsPhoneVerified: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false,
+            validate: {
+                notEmpty: true
+            }
+        },
     },
     {
         paranoid: true

@@ -93,22 +93,22 @@ const subCategoriesProductsFixtures = [
   {
     categoryLibelle: 'Accessoires',
     categoryIconClass: '',
-    parent: 2
+    parent: 4
   },
   {
     categoryLibelle: 'Robes',
     categoryIconClass: '',
-    parent: 2
+    parent: 4
   },
   {
     categoryLibelle: 'Pantalons',
     categoryIconClass: '',
-    parent: 2
+    parent: 4
   },
   {
     categoryLibelle: 'T-Shirts',
     categoryIconClass: '',
-    parent: 2
+    parent: 4
   },
   {
     categoryLibelle: 'Ordinateurs de bureau',
@@ -139,6 +139,7 @@ router.get('/fixtures-sub-produits', async(req, res) => {
     let categ = new category()
     categ.categoryParentId = cat.parent
     categ.categoryLibelle = cat.categoryLibelle
+    categ.categorySlug =  cat.categoryLibelle.replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     categ.save().catch((err) => {
       console.log(err);
       return res.status(500).send(err);
@@ -150,6 +151,7 @@ router.get('/fixtures-produits', async(req, res) => {
   categoriesProductsFixtures.forEach((cat)=>{
     let categ = new category()
     categ.categoryLibelle = cat.categoryLibelle
+    categ.categorySlug =  cat.categoryLibelle.replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     categ.categoryIconClass = cat.categoryIcon
     categ.save().catch((err) => {
       console.log(err);
@@ -162,6 +164,7 @@ router.get('/fixtures-boutiques', async(req, res) => {
   categoriesShopsFixtures.forEach((cat)=>{
     let categ = new category()
     categ.categoryLibelle = cat.libelle
+    categ.categorySlug =  cat.libelle.replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     categ.categoryIconClass = cat.icon
     categ.categoryType = 'shop'
     categ.save().catch((err) => {

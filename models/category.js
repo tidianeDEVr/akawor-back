@@ -8,15 +8,15 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
-        // categoryParentId: {
-        //     type: DataTypes.STRING,
-        //     validate: {
-        //         notEmpty: true
-        //     }
-        // },
         categoryType: {
             type: DataTypes.STRING,
             defaultValue: "product",
+            validate: {
+                notEmpty: true
+            }
+        },
+        categorySlug: {
+            type: DataTypes.STRING,
             validate: {
                 notEmpty: true
             }
@@ -33,26 +33,11 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     category.associate = (models) => {
-        category.hasMany(models.shop, {
-          foreignKey: {
-            name: 'categoryId',
-            allowNull: true
-          },
-          as: 'shops'
-        });
-        category.hasMany(models.product, {
-          foreignKey: {
-            name: 'productId',
-            allowNull: true
-          },
-          as: 'products'
-        });
-        category.hasOne(models.category, {
-          foreignKey: {
-            name: 'categoryParentId',
-            allowNull: true
-          },
-        });
+      category.hasMany(models.shop);
+      category.hasMany(models.product);
+      category.hasOne(models.category, {
+        foreignKey: 'categoryParentId'
+      });
     };
     
     return category; 

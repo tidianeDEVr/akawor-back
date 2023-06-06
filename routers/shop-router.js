@@ -1,8 +1,30 @@
 const express = require('express')
 const router = express.Router()
-const { shop } = require('../models/')
+const { shop, user } = require('../models/')
 
 
+// FIND ACTIVES 
+router.get('/find-actives', async (req, res)=>{
+  const shops = await shop.findAll()
+  if(shops) return res.send(shops)
+  res.send({message: 'shops not found'})
+})
+// FIND BY SELLER
+router.post('/find-by-seller', async (req, res)=>{
+  const email = req.body.email;
+  if(!email) return res.send({message: 'missing client email'});
+  const seller = await user.findOne({where: {userEmail: email}})
+  if(!seller) return res.send({message: 'seller not found'});
+  const sp = await shop.findOne({where: {userId: seller.id}})
+  if(!seller) return res.send({message: 'shop not found'});
+  res.send(sp)
+})
+// FIND BY SLUG
+router.get('/find-by-slug/:slug', async (req, res)=>{
+  const sp = await shop.findOne({where: {shopSlug: req.params.slug}})
+  if(sp) return res.send(sp)
+  res.send({message: 'shop not found'})
+})
 // FIND ALL
 router.get('/find-all', async (req, res) => {
     shop.findAll({
@@ -18,7 +40,7 @@ router.get('/find-all', async (req, res) => {
 
 // FIND BY ID
 router.get('/find-by-id', async (req, res) => {
-    shop.findById(req.params.id, {
+    shop.findOne(req.params.id, {
         
         })
         .then((shop) => {

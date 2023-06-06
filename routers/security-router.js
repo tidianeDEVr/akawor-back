@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const config = require("../config/config.json");
-const { user } = require("../models/");
+const { user, shop } = require("../models/");
 const {
   checkUserAttrsOnRegister,
   checkUserAttrsOnLogin,
@@ -21,6 +21,7 @@ router.post("/register", async (req, res) => {
     userEmail,
     userPassword,
     userPhoneNumber,
+    userRole,
   } = req.body;
   let hashedPwObject = await encryptPassword(req.body.userPassword);
   let newUser = new user({
@@ -30,20 +31,25 @@ router.post("/register", async (req, res) => {
     userEmail,
     userPassword,
     userPhoneNumber,
+    userRole,
   });
-  newUser.userPassword = hashedPwObject.hashedPw;
-  newUser.userSalt = hashedPwObject.salt;
-  console.log(newUser);
   const isAlreadyExists = await user
     .findOne({ where: { userEmail } })
     .catch((err) => {
       console.log(err);
     });
-  if (isAlreadyExists) return res.send({ message: "Already exists!" });
+  if (isAlreadyExists) return res.send({ message: "already exists!" });
+  newUser.userPassword = hashedPwObject.hashedPw;
+  newUser.userSalt = hashedPwObject.salt;
+
   await newUser.save().catch((err) => {
     console.log(err);
     return res.status(500).send(err);
   });
+  if (userRole === 'ROLE_VENDEUR') {
+    let newShop =  new shop();
+    newShop.setUser(newUser);
+  }
   res.send({ status: "success" });
 });
 
@@ -82,7 +88,8 @@ router.get("/user", async (req, res) => {
     const cookie = req.cookies["jwt"];
     const claims = jwt.verify(cookie, config.JWT_SECRET);
     if (!claims) res.status(401).send({ message: "unauthenticated" });
-    const authenticatedUser = await user.findOne({ id: claims.id });
+    // return res.send(claims);
+    const authenticatedUser = await user.findOne({ where: {id: claims.id} });
     const { userPassword, userSalt, ...data } =
       await authenticatedUser.toJSON();
     res.send(data);
@@ -93,7 +100,7 @@ router.get("/user", async (req, res) => {
 
 // LOGOUT
 router.post("/logout", async (req, res) => {
-  res.cookie("jwt", "", { maxAge: 0 });
+  res.cookie("jwt", "", { maxAge: -999 });
   res.send({ message: "success" });
 });
 

@@ -35,13 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     });
     
     pack.associate = (models) => {
-        pack.hasMany(models.subscription, {
-          foreignKey: {
-            name: 'packId',
-            allowNull: true
-          },
-          as: 'subscriptions'
-        });
+        pack.hasMany(models.subscription);
     };
 
     return pack; 

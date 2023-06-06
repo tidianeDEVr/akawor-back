@@ -3,21 +3,41 @@ module.exports = (sequelize, DataTypes) => {
     const product = sequelize.define('product', {
         productTitle: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
             validate: {
                 notEmpty: true
             }
         },
+        productMainImageId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        productSlug: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         productPrice: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             validate: {
                 notEmpty: true
             }
         },
         productDescription: {
             type: DataTypes.TEXT,
+            allowNull: true,
+            validate: {
+                notEmpty: true
+            }
+        },
+        productState: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: 'PENDING',
+        },
+        productIsPublish: {
+            type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: false,
             validate: {
                 notEmpty: true
             }
@@ -25,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
         productIsOutOfStock: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: false,
             validate: {
                 notEmpty: true
             }
@@ -35,29 +56,10 @@ module.exports = (sequelize, DataTypes) => {
     });
     
     product.associate = (models) => {
-        product.belongsTo(models.shop, {
-          foreignKey: {
-            name: 'shopId',
-            allowNull: false
-          },
-          as: 'products'
-        });
-
-        product.hasMany(models.boost, {
-            foreignKey: {
-              name: 'productId',
-              allowNull: false
-            },
-            as: 'boosts'
-        });
-
-        product.belongsTo(models.category, {
-            foreignKey: {
-              name: 'shopId',
-              allowNull: false
-            },
-            as: 'category'
-        });
+        product.belongsTo(models.shop);
+        product.belongsTo(models.category);
+        product.hasMany(models.boost);
+        product.hasMany(models.image)
     };
 
     return product; 

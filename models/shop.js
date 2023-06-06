@@ -4,6 +4,15 @@ module.exports = (sequelize, DataTypes) => {
         shopLibelle: {
             type: DataTypes.STRING,
             allowNull: false,
+            defaultValue: 'boutique-' + Date.now(),
+            validate: {
+                notEmpty: true
+            }
+        },
+        shopSlug: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: 'boutique-' + Date.now(),
             validate: {
                 notEmpty: true
             }
@@ -14,20 +23,39 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             },
         },
-        shopGoogleMapsUrl: {
+        shopDescription: {
             type: DataTypes.TEXT,
+            defaultValue: `Bienvenue dans notre boutique en ligne ! 
+                            Depuis notre création en [date], 
+                            nous sommes une entreprise spécialisée dans [secteurs d'activités]. 
+                            Avec une large gamme de [type de produit] de haute qualité, 
+                            nous nous engageons à vous offrir aux parents des produits tendances, 
+                            confortables et durables. En tant qu'entreprise éthique, 
+                            nous privilégions les partenariats avec des fournisseurs 
+                            locaux et favorisons des pratiques de fabrication 
+                            respectueuses de l'environnement. 
+                            Explorez notre sélection soigneusement conçue pour vous.`
+        },
+        shopLatitude: {
+            type: DataTypes.STRING,
             validate: {
                 notEmpty: true
             },
         },
-        shopProfileImagePath: {
+        shopLongitude: {
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: true
+            },
+        },
+        shopLogoImageId: {
             type: DataTypes.STRING,
             allowNull: true,
             validate: {
                 notEmpty: true
             }
-        },
-        shopCoverImagePath: {
+        },  
+        shopCoverImageId: {
             type: DataTypes.STRING,
             allowNull: true,
             validate: {
@@ -40,21 +68,10 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     shop.associate = (models) => {
-        shop.belongsTo(models.user, {
-          foreignKey: {
-            name: 'ownerId',
-            allowNull: true
-          },
-          as: 'shops'
-        });
-
-        shop.belongsTo(models.category, {
-            foreignKey: {
-              name: 'productId',
-              allowNull: false
-            },
-            as: 'category'
-        });
+        shop.belongsTo(models.user);
+        shop.belongsTo(models.category);
+        shop.hasMany(models.product);
+        shop.hasOne(models.image);
     };
 
     return shop; 

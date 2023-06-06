@@ -13,12 +13,12 @@ const orderlineRouter = require('./routers/order-line-router');
 const orderRouter = require('./routers/order-router');
 const packRouter = require('./routers/pack-router');
 const productRouter = require('./routers/product-router');
-const roleRouter = require('./routers/role-router');
 const shopRouter = require('./routers/shop-router');
 const subscriptionRouter = require('./routers/subscription-router');
 const transactionRouter = require('./routers/transaction-router');
 const userRouter = require('./routers/user-router');
 const securityRouter = require('./routers/security-router');
+const utilRouter = require('./routers/util-router');
 require('./auth/passport')
 
 // EXPRESS CONFIG
@@ -40,12 +40,12 @@ app.use('/api/orderline', orderlineRouter)
 app.use('/api/order', orderRouter)
 app.use('/api/pack', packRouter)
 app.use('/api/product', productRouter)
-app.use('/api/role', roleRouter)
 app.use('/api/shop', shopRouter)
 app.use('/api/subscription', subscriptionRouter)
 app.use('/api/transaction', transactionRouter)
 app.use('/api/user', userRouter)
 app.use('/api/security', securityRouter)
+app.use('/api/util', utilRouter)
 
 db.sequelize.sync().then((req)=>{
     app.listen(3001, ()=>{
