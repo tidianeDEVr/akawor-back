@@ -1,12 +1,25 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const Social = sequelize.define('social', {
-        subscriptionFinishAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            validate: {
-                notEmpty: true
-            }
+    const Social = sequelize.define('Social', {
+        facebookLink: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        instagramLink: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        tiktokLink: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        websiteLink: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        phoneNumber: {
+            type: DataTypes.STRING,
+            allowNull: true,
         },
     },
     {
@@ -14,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Social.associate = (models) => {
-        Social.belongsTo(models.Shop);
+        Social.belongsTo(models.Shop)
     };
 
     return Social; 

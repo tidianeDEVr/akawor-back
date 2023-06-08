@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const Pack = sequelize.define('pack', {
+    const Pack = sequelize.define('Pack', {
         packLibelle: {
             type: DataTypes.STRING,
             allowNull: false,

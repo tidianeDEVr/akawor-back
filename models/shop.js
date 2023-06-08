@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const Shop = sequelize.define('shop', {
+    const Shop = sequelize.define('Shop', {
         shopLibelle: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -56,14 +56,7 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },  
-        shopLogoImageId: {
-            type: DataTypes.STRING,
-            allowNull: true,
-            validate: {
-                notEmpty: true
-            }
-        },  
-        shopCoverImageId: {
+        shopLogoImage: {
             type: DataTypes.STRING,
             allowNull: true,
             validate: {
@@ -79,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
         Shop.belongsTo(models.User);
         Shop.belongsTo(models.Category);
         Shop.hasMany(models.Product);
-        Shop.hasOne(models.Social)
+        Shop.hasOne(models.Social);
     };
 
     return Shop; 

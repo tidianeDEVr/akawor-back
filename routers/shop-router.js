@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { Shop, User } = require('../models/')
+const { Shop, User, Social } = require('../models/')
 
 
 // FIND ACTIVES 
@@ -15,7 +15,12 @@ router.post('/find-by-seller', async (req, res)=>{
   if(!email) return res.send({message: 'missing client email'});
   const seller = await User.findOne({where: {userEmail: email}})
   if(!seller) return res.send({message: 'seller not found'});
-  const sp = await Shop.findOne({where: {userId: seller.id}})
+  const sp = await Shop.findOne({
+    where: {userId: seller.id},
+    include: [{
+      model: Social,
+    }]
+  })
   if(!seller) return res.send({message: 'shop not found'});
   res.send(sp)
 })

@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const Subscription = sequelize.define('subscription', {
+    const Subscription = sequelize.define('Subscription', {
         subscriptionFinishAt: {
             type: DataTypes.DATE,
             allowNull: false,
