@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const { image } = require('../models/')
+const { Image } = require('../models/')
 const path =  require('path')
+const fs = require('fs')
 const multer = require('multer')
 let imageNames = [];
 const storage = multer.diskStorage({
@@ -20,35 +21,32 @@ function getRandomInt(max) { return Math.floor(Math.random() * max) }
 
 // UPLOAD IMG
 router.post('/upload', upload.array('images'),async(req, res) => {
-  const productId = req.headers['productid'];
-  const shopId = req.headers['shopid'];
+  const productId = req.headers['product'];
+  const shopId = req.headers['shop'];
   imageNames.forEach((element)=>{
-    const img = new image();
+    const img = new Image();
     img.imageTitle = element;
-    // if(productId) img.setProduct(productId);
-    // if(shopId) img.setShop(shopId);
+    if(productId && productId!=0) img.productId = productId;
+    if(shopId && shopId!=0) img.shopId = shopId;
     img.save();
   })
   res.send({message: 'uploaded!'});
   imageNames = [];
 })
-
 // FIND ALL
-router.get('/find-all', async (req, res) => {
-    image.findAll({
-        
-    })
-    .then((images) => {
-        return res.status(200).json(images)
-    })
-    .catch((error) => {
-        return res.status(400).json(error)
-    });
+router.get('/find-by-product/:id', async (req, res) => {
+  Image.findAll({where: {productId: req.params.id}})
+  .then((images) => {
+      return res.send(images)
+  })
+  .catch((error) => {
+      return res.status(400).json(error)
+  });
 })
 
 // FIND BY ID
 router.get('/find-by-id', async (req, res) => {
-    image.findById(req.params.id, {
+    Image.findOne(req.params.id, {
         
         })
         .then((image) => {
@@ -65,12 +63,9 @@ router.get('/find-by-id', async (req, res) => {
 
 // UPDATE
 router.put('/update', async (req, res) => {
-    image.findById(req.params.id)
+    Image.findById(req.params.id)
     .then((image) => {
-      if (!image) {
-        return res.status(404).json({ message: 'Image introuvable' });
-      }
-
+      if (!image) return res.status(404).json({ message: 'Image introuvable' });
       image.update({
         ...image,
         ...req.body
@@ -89,11 +84,12 @@ router.put('/update', async (req, res) => {
 
 // DESTROY
 router.delete('/delete', async (req, res) => {
-    image.findById(req.params.id)
+    Image.findOne(req.params.id)
     .then((image) => {
-      if (!image) {
-        return res.status(400).json({ message: 'Image introuvable' });
-      }
+      if (!image) return res.status(400).json({ message: 'image not found' });
+      try {
+        fs.unlinkSync('./public/images/' + image.imageTitle);
+      } catch (error) { }
       image.destroy()
         .then((image) => {
           return res.status(200).json(image)

@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const { user } = require('../models/')
+const { User } = require('../models/')
 
 // FIND ALL
 router.get('/find-all', async (req, res) => {
-    user.findAll({
+    User.findAll({
         // include: [{
         //   model: Task,
         //   as: 'tasks'
@@ -20,11 +20,8 @@ router.get('/find-all', async (req, res) => {
 
 // FIND BY ID
 router.get('/find-by-id', async (req, res) => {
-    user.findById(req.params.id, {
-        //   include: [{
-        //     model: Task,
-        //     as: 'tasks'
-        //   }]
+    User.findById(req.params.id, {
+       
         })
         .then((user) => {
           if (!user) {
@@ -40,7 +37,7 @@ router.get('/find-by-id', async (req, res) => {
 
 // UPDATE
 router.put('/update', async (req, res) => {
-    user.findById(req.params.id)
+    User.findById(req.params.id)
     .then((user) => {
       if (!user) {
         return res.status(404).json({ message: 'User Not Found' });
@@ -64,7 +61,7 @@ router.put('/update', async (req, res) => {
 
 // DESTROY
 router.delete('/delete', async (req, res) => {
-    user.findById(req.params.id)
+    User.findById(req.params.id)
     .then((user) => {
       if (!user) {
         return res.status(400).json({ message: 'User Not Found' });

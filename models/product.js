@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const product = sequelize.define('product', {
+    const Product = sequelize.define('product', {
         productTitle: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
-        productMainImageId: {
-            type: DataTypes.INTEGER,
+        productMainImage: {
+            type: DataTypes.STRING,
             allowNull: true,
         },
         productSlug: {
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         productState: {
             type: DataTypes.STRING,
             allowNull: true,
-            defaultValue: 'PENDING',
+            defaultValue: 'DRAFT',
         },
         productIsPublish: {
             type: DataTypes.BOOLEAN,
@@ -55,12 +55,12 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true
     });
     
-    product.associate = (models) => {
-        product.belongsTo(models.shop);
-        product.belongsTo(models.category);
-        product.hasMany(models.boost);
-        product.hasMany(models.image)
+    Product.associate = (models) => {
+        Product.belongsTo(models.Shop);
+        Product.belongsTo(models.Category);
+        Product.hasMany(models. Boost);
+        Product.hasMany(models.Image)
     };
 
-    return product; 
+    return Product; 
 }

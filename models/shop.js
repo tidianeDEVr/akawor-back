@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const shop = sequelize.define('shop', {
+    const Shop = sequelize.define('shop', {
         shopLibelle: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -47,7 +47,15 @@ module.exports = (sequelize, DataTypes) => {
             validate: {
                 notEmpty: true
             },
-        },
+        }, 
+        shopWorkingHours: {
+            type: DataTypes.STRING,
+            defaultValue: "Lundi au vendredi : 8H15 - 16H45.",
+            allowNull: true,
+            validate: {
+                notEmpty: true
+            }
+        },  
         shopLogoImageId: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -67,12 +75,12 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true
     });
 
-    shop.associate = (models) => {
-        shop.belongsTo(models.user);
-        shop.belongsTo(models.category);
-        shop.hasMany(models.product);
-        shop.hasOne(models.image);
+    Shop.associate = (models) => {
+        Shop.belongsTo(models.User);
+        Shop.belongsTo(models.Category);
+        Shop.hasMany(models.Product);
+        Shop.hasOne(models.Social)
     };
 
-    return shop; 
+    return Shop; 
 }

@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const { pack } = require('../models/')
+const { Pack } = require('../models/')
 
 // FIND ALL
 router.get('/find-all', async (req, res) => {
-    pack.findAll({
+    Pack.findAll({
         
     })
     .then((packs) => {
@@ -17,7 +17,7 @@ router.get('/find-all', async (req, res) => {
 
 // FIND BY ID
 router.get('/find-by-id', async (req, res) => {
-    pack.findById(req.params.id, {
+    Pack.findById(req.params.id, {
         
         })
         .then((pack) => {
@@ -34,7 +34,7 @@ router.get('/find-by-id', async (req, res) => {
 
 // UPDATE
 router.put('/update', async (req, res) => {
-    pack.findById(req.params.id)
+    Pack.findById(req.params.id)
     .then((pack) => {
       if (!pack) {
         return res.status(404).json({ message: 'Pack introuvable' });
@@ -58,7 +58,7 @@ router.put('/update', async (req, res) => {
 
 // DESTROY
 router.delete('/delete', async (req, res) => {
-    pack.findById(req.params.id)
+    Pack.findById(req.params.id)
     .then((pack) => {
       if (!pack) {
         return res.status(400).json({ message: 'Pack introuvable' });

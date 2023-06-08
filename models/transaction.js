@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const transaction = sequelize.define('transaction', {
+    const Transaction = sequelize.define('transaction', {
         transactionStatus: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -13,5 +13,5 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true
     });
 
-    return transaction; 
+    return Transaction; 
 }

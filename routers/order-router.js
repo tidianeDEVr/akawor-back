@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { order } = require('../models/')
+const { Order } = require('../models/')
 
 
 // FIND ALL
 router.get('/find-all', async (req, res) => {
-    order.findAll({
+    Order.findAll({
         
     })
     .then((orders) => {
@@ -18,7 +18,7 @@ router.get('/find-all', async (req, res) => {
 
 // FIND BY ID
 router.get('/find-by-id', async (req, res) => {
-    order.findById(req.params.id, {
+    Order.findById(req.params.id, {
         
         })
         .then((order) => {
@@ -35,7 +35,7 @@ router.get('/find-by-id', async (req, res) => {
 
 // UPDATE
 router.put('/update', async (req, res) => {
-    order.findById(req.params.id)
+    Order.findById(req.params.id)
     .then((order) => {
       if (!order) {
         return res.status(404).json({ message: 'Commande introuvable' });
@@ -59,7 +59,7 @@ router.put('/update', async (req, res) => {
 
 // DESTROY
 router.delete('/delete', async (req, res) => {
-    order.findById(req.params.id)
+    Order.findById(req.params.id)
     .then((order) => {
       if (!order) {
         return res.status(400).json({ message: 'Commande introuvable' });

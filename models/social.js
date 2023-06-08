@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const Subscription = sequelize.define('subscription', {
+    const Social = sequelize.define('social', {
         subscriptionFinishAt: {
             type: DataTypes.DATE,
             allowNull: false,
@@ -13,9 +13,9 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true
     });
 
-    // Subscription.associate = (models) => {
-    //     Subscription.belongsTo(models.Subscription);
-    // };
+    Social.associate = (models) => {
+        Social.belongsTo(models.Shop);
+    };
 
-    return Subscription; 
+    return Social; 
 }

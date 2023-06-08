@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const pack = sequelize.define('pack', {
+    const Pack = sequelize.define('pack', {
         packLibelle: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -34,9 +34,9 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true
     });
     
-    pack.associate = (models) => {
-        pack.hasMany(models.subscription);
+    Pack.associate = (models) => {
+        Pack.hasMany(models.Subscription);
     };
 
-    return pack; 
+    return Pack; 
 }

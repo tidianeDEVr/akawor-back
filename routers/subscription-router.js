@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { subscription } = require('../models/')
+const { Subscription } = require('../models/')
 
 
 // FIND ALL
 router.get('/find-all', async (req, res) => {
-    subscription.findAll({
+    Subscription.findAll({
         
     })
     .then((subscriptions) => {
@@ -18,7 +18,7 @@ router.get('/find-all', async (req, res) => {
 
 // FIND BY ID
 router.get('/find-by-id', async (req, res) => {
-    subscription.findById(req.params.id, {
+    Subscription.findById(req.params.id, {
         
         })
         .then((subscription) => {
@@ -35,7 +35,7 @@ router.get('/find-by-id', async (req, res) => {
 
 // UPDATE
 router.put('/update', async (req, res) => {
-    subscription.findById(req.params.id)
+    Subscription.findById(req.params.id)
     .then((subscription) => {
       if (!subscription) {
         return res.status(404).json({ message: 'Abonnement introuvable' });
@@ -59,7 +59,7 @@ router.put('/update', async (req, res) => {
 
 // DESTROY
 router.delete('/delete', async (req, res) => {
-    subscription.findById(req.params.id)
+    Subscription.findById(req.params.id)
     .then((subscription) => {
       if (!subscription) {
         return res.status(400).json({ message: 'Abonnement introuvable' });

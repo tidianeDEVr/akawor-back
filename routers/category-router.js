@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { category } = require('../models/')
+const { Category } = require('../models/')
 const categoriesProductsFixtures = [
   {
     categoryLibelle: 'Agroalimentaire',
@@ -136,7 +136,7 @@ const subCategoriesProductsFixtures = [
 // INSERT
 router.get('/fixtures-sub-produits', async(req, res) => {
   subCategoriesProductsFixtures.forEach((cat)=>{
-    let categ = new category()
+    let categ = new Category()
     categ.categoryParentId = cat.parent
     categ.categoryLibelle = cat.categoryLibelle
     categ.categorySlug =  cat.categoryLibelle.replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -149,7 +149,7 @@ router.get('/fixtures-sub-produits', async(req, res) => {
 })
 router.get('/fixtures-produits', async(req, res) => {
   categoriesProductsFixtures.forEach((cat)=>{
-    let categ = new category()
+    let categ = new Category()
     categ.categoryLibelle = cat.categoryLibelle
     categ.categorySlug =  cat.categoryLibelle.replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     categ.categoryIconClass = cat.categoryIcon
@@ -162,7 +162,7 @@ router.get('/fixtures-produits', async(req, res) => {
 })
 router.get('/fixtures-boutiques', async(req, res) => {
   categoriesShopsFixtures.forEach((cat)=>{
-    let categ = new category()
+    let categ = new Category()
     categ.categoryLibelle = cat.libelle
     categ.categorySlug =  cat.libelle.replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     categ.categoryIconClass = cat.icon
@@ -176,7 +176,7 @@ router.get('/fixtures-boutiques', async(req, res) => {
 })
 // FIND ALL
 router.get('/find-all', async (req, res) => {
-    category.findAll({
+    Category.findAll({
         
     })
     .then(async (categories) => {
@@ -189,7 +189,7 @@ router.get('/find-all', async (req, res) => {
 router.get('/find-all/:type', async (req, res) => {
     let categoriesWithoutType = []
     const type = req.params.type
-    category.findAll({
+    Category.findAll({
       where: {
         categoryType: type,
         categoryParentId: null
@@ -210,7 +210,7 @@ router.get('/find-all/:type', async (req, res) => {
 router.get('/find-subs/:parent', async (req, res)=>{
   let subCategories = []
   const parent = req.params.parent
-  category.findAll({where: { categoryParentId: parent }})
+  Category.findAll({where: { categoryParentId: parent }})
   .then((categories)=>{
     res.send(categories)
   })
@@ -221,7 +221,7 @@ router.get('/find-subs/:parent', async (req, res)=>{
 
 // FIND BY ID
 router.get('/find-by-id', async (req, res) => {
-    category.findById(req.params.id, {
+    Category.findById(req.params.id, {
         
         })
         .then((category) => {
@@ -238,7 +238,7 @@ router.get('/find-by-id', async (req, res) => {
 
 // UPDATE
 router.put('/update', async (req, res) => {
-    category.findById(req.params.id)
+    Category.findById(req.params.id)
     .then((category) => {
       if (!category) {
         return res.status(404).json({ message: 'Categorie introuvable' });
@@ -262,7 +262,7 @@ router.put('/update', async (req, res) => {
 
 // DESTROY
 router.delete('/delete', async (req, res) => {
-    category.findById(req.params.id)
+    Category.findById(req.params.id)
     .then((category) => {
       if (!category) {
         return res.status(400).json({ message: 'Categorie introuvable' });

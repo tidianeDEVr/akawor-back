@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const user = sequelize.define('user', {
+    const User = sequelize.define('user', {
         userFirstName: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -32,6 +32,14 @@ module.exports = (sequelize, DataTypes) => {
         userEmail: {
             type: DataTypes.STRING,
             allowNull: false,
+            validate: {
+                notEmpty: true
+            }
+        },
+        userProvider: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: 'REGISTERED',
             validate: {
                 notEmpty: true
             }
@@ -78,5 +86,5 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true
     });
 
-    return user; 
+    return User; 
 }

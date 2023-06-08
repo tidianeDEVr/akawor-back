@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const { delivery } = require('../models/')
+const { Delivery } = require('../models/')
 
 // FIND ALL
 router.get('/find-all', async (req, res) => {
-    delivery.findAll({
+    Delivery.findAll({
         
     })
     .then((deliveries) => {
@@ -17,7 +17,7 @@ router.get('/find-all', async (req, res) => {
 
 // FIND BY ID
 router.get('/find-by-id', async (req, res) => {
-    delivery.findById(req.params.id, {
+    Delivery.findById(req.params.id, {
         
         })
         .then((delivery) => {
@@ -34,7 +34,7 @@ router.get('/find-by-id', async (req, res) => {
 
 // UPDATE
 router.put('/update', async (req, res) => {
-    delivery.findById(req.params.id)
+    Delivery.findById(req.params.id)
     .then((delivery) => {
       if (!delivery) {
         return res.status(404).json({ message: 'Livraison introuvable' });
@@ -58,7 +58,7 @@ router.put('/update', async (req, res) => {
 
 // DESTROY
 router.delete('/delete', async (req, res) => {
-    delivery.findById(req.params.id)
+    Delivery.findById(req.params.id)
     .then((delivery) => {
       if (!delivery) {
         return res.status(400).json({ message: 'Livraison introuvable' });

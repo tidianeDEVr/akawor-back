@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { shop, user } = require('../models/')
+const { Shop, User } = require('../models/')
 
 
 // FIND ACTIVES 
 router.get('/find-actives', async (req, res)=>{
-  const shops = await shop.findAll()
+  const shops = await Shop.findAll()
   if(shops) return res.send(shops)
   res.send({message: 'shops not found'})
 })
@@ -13,21 +13,21 @@ router.get('/find-actives', async (req, res)=>{
 router.post('/find-by-seller', async (req, res)=>{
   const email = req.body.email;
   if(!email) return res.send({message: 'missing client email'});
-  const seller = await user.findOne({where: {userEmail: email}})
+  const seller = await User.findOne({where: {userEmail: email}})
   if(!seller) return res.send({message: 'seller not found'});
-  const sp = await shop.findOne({where: {userId: seller.id}})
+  const sp = await Shop.findOne({where: {userId: seller.id}})
   if(!seller) return res.send({message: 'shop not found'});
   res.send(sp)
 })
 // FIND BY SLUG
 router.get('/find-by-slug/:slug', async (req, res)=>{
-  const sp = await shop.findOne({where: {shopSlug: req.params.slug}})
+  const sp = await Shop.findOne({where: {shopSlug: req.params.slug}})
   if(sp) return res.send(sp)
   res.send({message: 'shop not found'})
 })
 // FIND ALL
 router.get('/find-all', async (req, res) => {
-    shop.findAll({
+    Shop.findAll({
         
     })
     .then((shops) => {
@@ -40,7 +40,7 @@ router.get('/find-all', async (req, res) => {
 
 // FIND BY ID
 router.get('/find-by-id', async (req, res) => {
-    shop.findOne(req.params.id, {
+    Shop.findOne(req.params.id, {
         
         })
         .then((shop) => {
@@ -57,7 +57,7 @@ router.get('/find-by-id', async (req, res) => {
 
 // UPDATE
 router.put('/update', async (req, res) => {
-    shop.findById(req.params.id)
+    Shop.findById(req.params.id)
     .then((shop) => {
       if (!shop) {
         return res.status(404).json({ message: 'Boutique introuvable' });
@@ -81,7 +81,7 @@ router.put('/update', async (req, res) => {
 
 // DESTROY
 router.delete('/delete', async (req, res) => {
-    shop.findById(req.params.id)
+    Shop.findById(req.params.id)
     .then((shop) => {
       if (!shop) {
         return res.status(400).json({ message: 'Boutique introuvable' });

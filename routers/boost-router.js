@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { boost } = require("../models/");
+const { Boost } = require("../models/");
 const passport = require("passport");
 
 // FIND ALL
@@ -8,7 +8,7 @@ router.get(
   "/find-all",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    boost
+    Boost
       .findAll({})
       .then((boosts) => {
         return res.status(200).json(boosts);
@@ -21,7 +21,7 @@ router.get(
 
 // FIND BY ID
 router.get("/find-by-id", async (req, res) => {
-  boost
+  Boost
     .findById(req.params.id, {})
     .then((boost) => {
       if (!boost) {
@@ -37,7 +37,7 @@ router.get("/find-by-id", async (req, res) => {
 
 // UPDATE
 router.put("/update", async (req, res) => {
-  boost
+  Boost
     .findById(req.params.id)
     .then((boost) => {
       if (!boost) {
@@ -63,7 +63,7 @@ router.put("/update", async (req, res) => {
 
 // DESTROY
 router.delete("/delete", async (req, res) => {
-  boost
+  Boost
     .findById(req.params.id)
     .then((boost) => {
       if (!boost) {

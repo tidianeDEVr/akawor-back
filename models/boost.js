@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const boost = sequelize.define('boost', {
+    const Boost = sequelize.define('boost', {
         boostStatus: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true
     });
 
-    boost.associate = (models) => {
-        boost.belongsTo(models.product, {
+    Boost.associate = (models) => {
+        Boost.belongsTo(models.Product, {
           foreignKey: {
             name: 'productId',
             allowNull: false
@@ -31,5 +31,5 @@ module.exports = (sequelize, DataTypes) => {
     };
     
     
-    return boost; 
+    return Boost; 
 }

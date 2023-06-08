@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const config = require("../config/config.json");
-const { user, shop } = require("../models/");
+const { User, Shop } = require("../models/");
 const {
   checkUserAttrsOnRegister,
   checkUserAttrsOnLogin,
@@ -24,7 +24,7 @@ router.post("/register", async (req, res) => {
     userRole,
   } = req.body;
   let hashedPwObject = await encryptPassword(req.body.userPassword);
-  let newUser = new user({
+  let newUser = new User({
     userFirstName,
     userLastName,
     userBirthday,
@@ -33,7 +33,7 @@ router.post("/register", async (req, res) => {
     userPhoneNumber,
     userRole,
   });
-  const isAlreadyExists = await user
+  const isAlreadyExists = await User
     .findOne({ where: { userEmail } })
     .catch((err) => {
       console.log(err);
@@ -47,7 +47,7 @@ router.post("/register", async (req, res) => {
     return res.status(500).send(err);
   });
   if (userRole === 'ROLE_VENDEUR') {
-    let newShop =  new shop();
+    let newShop =  new Shop();
     newShop.setUser(newUser);
   }
   res.send({ status: "success" });
@@ -59,7 +59,7 @@ router.post("/login", async (req, res) => {
   if (!checkUserAttrsOnLogin(req.body))
     return res.status(500).send({ message: "Missing data" });
   const { userEmail, userPassword } = req.body;
-  const userWithEmail = await user
+  const userWithEmail = await User
     .findOne({ where: { userEmail } })
     .catch((err) => {
       console.log(err);
@@ -89,7 +89,7 @@ router.get("/user", async (req, res) => {
     const claims = jwt.verify(cookie, config.JWT_SECRET);
     if (!claims) res.status(401).send({ message: "unauthenticated" });
     // return res.send(claims);
-    const authenticatedUser = await user.findOne({ where: {id: claims.id} });
+    const authenticatedUser = await User.findOne({ where: {id: claims.id} });
     const { userPassword, userSalt, ...data } =
       await authenticatedUser.toJSON();
     res.send(data);

@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const image = sequelize.define('image', {
+    const Image = sequelize.define('image', {
         imageTitle: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -9,5 +9,5 @@ module.exports = (sequelize, DataTypes) => {
             }
         },
     });
-    return image; 
+    return Image; 
 }

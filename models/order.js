@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const order = sequelize.define('order', {
+    const Order = sequelize.define('order', {
         orderStatus: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -10,5 +10,5 @@ module.exports = (sequelize, DataTypes) => {
         },
     });
     
-    return order; 
+    return Order; 
 }

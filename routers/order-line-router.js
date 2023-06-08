@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { orderLine } = require('../models/')
+const { OrderLine } = require('../models/')
 
 
 // FIND ALL
 router.get('/find-all', async (req, res) => {
-    orderLine.findAll({
+    OrderLine.findAll({
         
     })
     .then((orderlines) => {
@@ -18,7 +18,7 @@ router.get('/find-all', async (req, res) => {
 
 // FIND BY ID
 router.get('/find-by-id', async (req, res) => {
-    orderLine.findById(req.params.id, {
+    OrderLine.findById(req.params.id, {
         
         })
         .then((orderline) => {
@@ -35,7 +35,7 @@ router.get('/find-by-id', async (req, res) => {
 
 // UPDATE
 router.put('/update', async (req, res) => {
-    orderLine.findById(req.params.id)
+    OrderLine.findById(req.params.id)
     .then((orderline) => {
       if (!orderline) {
         return res.status(404).json({ message: 'Ligne de commande introuvable' });
@@ -59,7 +59,7 @@ router.put('/update', async (req, res) => {
 
 // DESTROY
 router.delete('/delete', async (req, res) => {
-    orderLine.findById(req.params.id)
+    OrderLine.findById(req.params.id)
     .then((orderline) => {
       if (!orderline) {
         return res.status(400).json({ message: 'Ligne de commande introuvable' });
