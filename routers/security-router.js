@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const config = require("../config/config.json");
-const { User, Shop, Social } = require("../models/");
+const { User, Shop, Social, Wishlist } = require("../models/");
 const {
   checkUserAttrsOnRegister,
   checkUserAttrsOnLogin,
@@ -52,6 +52,8 @@ router.post("/register", async (req, res) => {
     let social = new Social();
     await social.setShop(newShop);
   }
+  let wishlist = new Wishlist();
+  await wishlist.setUser(newUser);
   res.send({ status: "success" });
 });
 

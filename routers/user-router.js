@@ -4,12 +4,7 @@ const { User } = require('../models/')
 
 // FIND ALL
 router.get('/find-all', async (req, res) => {
-    User.findAll({
-        // include: [{
-        //   model: Task,
-        //   as: 'tasks'
-        // }]
-    })
+    User.findAll({ })
     .then((users) => {
         return res.status(200).json(users)
     })

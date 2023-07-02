@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { Image } = require('../models/')
+const { Image, Shop, Product } = require('../models/')
 const path =  require('path')
 const fs = require('fs')
 const multer = require('multer')
@@ -23,15 +23,34 @@ function getRandomInt(max) { return Math.floor(Math.random() * max) }
 router.post('/upload', upload.array('images'),async(req, res) => {
   const productId = req.headers['product'];
   const shopId = req.headers['shop'];
-  imageNames.forEach((element)=>{
-    const img = new Image();
-    img.imageTitle = element;
-    if(productId && productId!=0) img.productId = productId;
-    if(shopId && shopId!=0) img.shopId = shopId;
-    img.save();
+  let productObject;
+  if(productId && productId!=0) {
+    await Product.findOne({where: {id: productId}})
+    .then(async (res)=>{
+      if(res && !res.productMainImage) {
+        await res.setDataValue('productMainImage', req.files[0].filename)
+        await res.save();
+        productObject = res;
+      }
+    })
+  };
+  if(shopId && shopId!=0) {
+    await Shop.findOne({where: {id: shopId}})
+    .then(async (res)=>{
+      if(res) await res.setDataValue('shopLogoImage', req.files[0].filename);
+      await res.save();
+    })
+  }
+  imageNames.forEach(async (element)=>{
+    if(element && element!='') {
+      let img = new Image();
+      await img.setDataValue('imageTitle', element);
+      if(productObject) await img.setProduct(productObject);
+      await img.save();
+    }
   })
-  res.send({message: 'uploaded!'});
-  imageNames = [];
+  imageNames = []
+  res.send({message: 'uploaded succesfully !'});
 })
 // FIND ALL
 router.get('/find-by-product/:id', async (req, res) => {
@@ -83,24 +102,34 @@ router.put('/update', async (req, res) => {
 })
 
 // DESTROY
-router.delete('/delete', async (req, res) => {
-    Image.findOne(req.params.id)
-    .then((image) => {
-      if (!image) return res.status(400).json({ message: 'image not found' });
-      try {
-        fs.unlinkSync('./public/images/' + image.imageTitle);
-      } catch (error) { }
-      image.destroy()
-        .then((image) => {
-          return res.status(200).json(image)
-        })
-        .catch((error) => {
-          return res.status(400).json(error)
-        });
-    })
-    .catch((error) => {
-      return res.status(400).json(error)
-    });
+router.delete('/delete/:type/:id', async (req, res) => {
+  const type = req.params.type
+  const id = req.params.id
+  console.log(req.headers);
+  if(type==='shop' && id) {
+    const shop = await Shop.findOne({where: {id: id}})
+    // shop.setDataValue('shopLogoImage', '');
+    console.log(shop);
+    // shop.save();
+  }
+  res.send('ok');
+  // Image.findOne({where: {id}})
+  // .then((image) => {
+  //   if (!image) return res.status(400).json({ message: 'image not found' });
+  //   try {
+  //     fs.unlinkSync('./public/images/' + image.imageTitle);
+  //   } catch (error) { }
+  //   image.destroy()
+  //     .then((image) => {
+  //       return res.status(200).json(image)
+  //     })
+  //     .catch((error) => {
+  //       return res.status(400).json(error)
+  //     });
+  // })
+  // .catch((error) => {
+  //   return res.status(400).json(error)
+  // });
 })
 
 module.exports = router

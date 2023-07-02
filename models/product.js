@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true,
             defaultValue: 'DRAFT',
         },
+        productFeatures: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         productIsPublish: {
             type: DataTypes.BOOLEAN,
             allowNull: false,

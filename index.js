@@ -48,6 +48,7 @@ app.use('/api/security', securityRouter)
 app.use('/api/util', utilRouter)
 
 db.sequelize.sync().then((req)=>{
+// db.sequelize.sync({force:true}).then((req)=>{
     app.listen(3001, ()=>{
         console.log('Akawor Back Running : 3001');
     })

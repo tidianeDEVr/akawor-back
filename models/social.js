@@ -17,10 +17,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
-        phoneNumber: {
+        shopPhoneNumber: {
             type: DataTypes.STRING,
             allowNull: true,
         },
+        shopEmailAddress: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        }
     },
     {
         paranoid: true
