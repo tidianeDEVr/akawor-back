@@ -225,19 +225,17 @@ router.get('/find-subs/:parent', async (req, res)=>{
 })
 
 // FIND BY ID
-router.get('/find-by-id', async (req, res) => {
-    Category.findById(req.params.id, {
-        
-        })
-        .then((category) => {
-          if (!category) {
-            return res.status(404).json({ message: 'Categorie introuvable' });
-          }
-    
-          return res.status(200).json(category);
-        })
-        .catch((error) => {
-          return res.status(400).json(error)
+router.get('/find-by-id/:id', async (req, res) => {
+    Category.findOne({where: {id: req.params.id }})
+      .then((category) => {
+        if (!category) {
+          return res.status(404).json({ message: 'Categorie introuvable' });
+        }
+  
+        return res.status(200).json(category);
+      })
+      .catch((error) => {
+        return res.status(400).json(error)
     });
 })
 
