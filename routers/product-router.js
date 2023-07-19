@@ -3,9 +3,14 @@ const router = express.Router();
 const { Wishlist, Product, Shop, Category } = require("../models/");
 const { checkProductBeforeInsert } = require("../services/product-service");
 const _ = require("lodash");
+const { generateSlug } = require('../services/util-service');
+const { TOKEN_LABEL } = require("../env");
+const passport = require("passport");
 
 // CREATE PRODUCT
-router.post("/insert", async (req, res) => {
+router.post("/insert", 
+passport.authenticate(TOKEN_LABEL, { session: false }),
+async (req, res) => {
   if (!checkProductBeforeInsert)
     return res.status(400).send({ message: "missing data!" });
   const {
@@ -32,11 +37,7 @@ router.post("/insert", async (req, res) => {
     productObject.setShop(ownerShop.id);
     productObject.setCategory(categ.id);
   }
-  productObject.productSlug = productTitle
-    .replaceAll(" ", "-")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
+  productObject.productSlug = generateSlug(productTitle);
   await productObject.save();
   res.send(productObject);
 });
@@ -79,6 +80,19 @@ router.get("/find-by-category/:slug", async (req, res) => {
   }
   return res.send(products);
 });
+// FIND RECENTS
+router.get('/find-recents', async (req, res) => {
+  Product.findAll({
+    limit: 4,
+    order: [[ 'createdAt', 'DESC' ]]
+  })
+    .then((products) => {
+      return res.status(200).json(products);
+    })
+    .catch((error) => {
+      return res.status(400).json(error);
+    });
+})
 // FIND ALL
 router.get("/find-all", async (req, res) => {
   Product.findAll({})
@@ -89,6 +103,40 @@ router.get("/find-all", async (req, res) => {
       return res.status(400).json(error);
     });
 });
+// FIND ALL DASHBOARD
+router.get("/find-all/dashboard", 
+passport.authenticate(TOKEN_LABEL, { session: false }),
+async (req, res) => {
+  Product.findAll({
+    include: [
+      {model: Shop },
+      {model: Category },
+    ],
+  })
+    .then((products) => {
+      return res.status(200).json(products);
+    })
+    .catch((error) => {
+      return res.status(400).json(error);
+    });
+});
+// FIND LASTEST PRODUCTS
+router.get("/find-latests/dashboard", async(req, res)=>{
+  Product.findAll({
+    include: [
+      {model: Shop },
+      {model: Category },
+    ],
+    limit: 10,
+    order: [[ 'createdAt', 'DESC' ]]
+  })
+  .then((products) => {
+    return res.status(200).json(products);
+  })
+  .catch((error) => {
+    return res.status(400).json(error);
+  });
+})
 // FIND BY SLUG
 router.get("/find-by-slug/:slug", async (req, res) => {
   const prod = await Product.findOne({

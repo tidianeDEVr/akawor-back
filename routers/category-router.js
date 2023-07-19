@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const { Category } = require('../models/')
+const { checkCategoryBeforeInsert } = require("../services/category-service");
+const { generateSlug } = require('../services/util-service');
 const categoriesProductsFixtures = [
   {
     categoryLibelle: 'Agroalimentaire',
@@ -134,12 +136,32 @@ const subCategoriesProductsFixtures = [
 
 
 // INSERT
+router.post('/insert', async(req, res)=> {
+  const category = req.body.category;
+  var parentCat;
+  if(!category || !checkCategoryBeforeInsert(category)) 
+    return res.status(400).send({message: 'Missing data'});
+  const slugExist = await Category.findOne({where: {categorySlug: generateSlug(category.categoryLibelle)}});
+  if(slugExist) return res.send({message: 'Already exist'});
+  if(category.parentId) await Category.findOne({where: {id: category.parentId}})
+  .then((res)=>{
+    parentCat = res;
+  })
+  let toInsert = new Category();
+  toInsert.categoryLibelle = category.categoryLibelle;
+  toInsert.categorySlug = generateSlug(category.categoryLibelle)
+  toInsert.categoryType = category.categoryType;
+  if(category.categoryIconClass) toInsert.categoryIconClass = category.categoryIconClass;
+  if(parentCat) toInsert.categoryParentId = category.categoryParentId;
+  await toInsert.save();
+  res.send(toInsert);
+})
 router.get('/fixtures-sub-produits', async(req, res) => {
   subCategoriesProductsFixtures.forEach(async (cat)=>{
     let categ = new Category()
     categ.categoryParentId = cat.parent
     categ.categoryLibelle = cat.categoryLibelle
-    categ.categorySlug =  cat.categoryLibelle.replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    categ.categorySlug =  generateSlug(cat.categoryLibelle);
     categ.categorySlug = categ.categorySlug.replaceAll(',', '');
     await categ.save().catch((err) => {
       console.log(err);
@@ -152,7 +174,7 @@ router.get('/fixtures-produits', async(req, res) => {
   categoriesProductsFixtures.forEach(async (cat)=>{
     let categ = new Category()
     categ.categoryLibelle = cat.categoryLibelle
-    categ.categorySlug =  cat.categoryLibelle.replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    categ.categorySlug =  generateSlug(cat.categoryLibelle);
     categ.categoryIconClass = cat.categoryIcon
     await categ.save().catch((err) => {
       console.log(err);
@@ -165,7 +187,7 @@ router.get('/fixtures-boutiques', async(req, res) => {
   categoriesShopsFixtures.forEach(async(cat)=>{
     let categ = new Category()
     categ.categoryLibelle = cat.libelle
-    categ.categorySlug =  cat.libelle.replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    categ.categorySlug = generateSlug(cat.libelle);
     categ.categoryIconClass = cat.icon
     categ.categoryType = 'shop'
     await categ.save().catch((err) => {
@@ -177,11 +199,9 @@ router.get('/fixtures-boutiques', async(req, res) => {
 })
 // FIND ALL
 router.get('/find-all', async (req, res) => {
-    Category.findAll({
-        
-    })
+    Category.findAll({ })
     .then(async (categories) => {
-      return res.status(200).json(data)
+      return res.status(200).json(categories)
     })
     .catch((error) => {
         return res.status(400).json(error)

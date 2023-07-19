@@ -22,6 +22,9 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
+        productPricePromo: {
+            type: DataTypes.INTEGER,
+        },
         productDescription: {
             type: DataTypes.TEXT,
             allowNull: true,

@@ -9,6 +9,7 @@ const {
   decryptPassword,
   encryptPassword,
 } = require("../services/security-service");
+const { TOKEN_LABEL } = require("../env");
 
 // INSCRIPTION
 router.post("/register", async (req, res) => {
@@ -75,11 +76,11 @@ router.post("/login", async (req, res) => {
         { id: userWithEmail.id, userEmail: userWithEmail.userEmail },
         config.JWT_SECRET
       );
-      res.cookie("jwt", jwtToken, {
+      res.cookie(TOKEN_LABEL, jwtToken, {
         httpOnly: true,
         maxAge: 48 * 60 * 60 * 1000,
       }); // max age : 2 days
-      res.json({ message: "success" });
+      res.json({ message: "success", role: userWithEmail.userRole });
     } else {
       return res.status(401).send({ message: errorMessage });
     }
@@ -89,22 +90,22 @@ router.post("/login", async (req, res) => {
 // GET AUTHENTICATED USER
 router.get("/user", async (req, res) => {
   try {
-    const cookie = req.cookies["jwt"];
+    const cookie = req.cookies[TOKEN_LABEL];
     const claims = jwt.verify(cookie, config.JWT_SECRET);
-    if (!claims) res.status(401).send({ message: "unauthenticated" });
+    if (!claims) res.send({ message: "unauthenticated" });
     // return res.send(claims);
     const authenticatedUser = await User.findOne({ where: {id: claims.id} });
     const { userPassword, userSalt, ...data } =
       await authenticatedUser.toJSON();
     res.send(data);
   } catch (error) {
-    res.status(401).send({ message: "unauthenticated" });
+    res.send({ message: "unauthenticated" });
   }
 });
 
 // LOGOUT
 router.post("/logout", async (req, res) => {
-  res.cookie("jwt", "", { maxAge: -999 });
+  res.cookie(TOKEN_LABEL, "", { maxAge: -999 });
   res.send({ message: "success" });
 });
 

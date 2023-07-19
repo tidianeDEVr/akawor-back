@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Image, Shop, Product } = require("../models/");
 const path = require("path");
-const fs = require("fs");
+const sharp = require("sharp");
 const multer = require("multer");
 let imageNames = [];
 const storage = multer.diskStorage({
@@ -32,7 +32,7 @@ router.post("/upload", upload.array("images"), async (req, res) => {
   if (productId && productId != 0) {
     await Product.findOne({ where: { id: productId } }).then(async (res) => {
       if (res) productObject = res;
-      if(isMainImage=='true') {
+      if (isMainImage == "true") {
         await res.setDataValue("productMainImage", req.files[0].filename);
         await res.save();
       }
@@ -44,6 +44,17 @@ router.post("/upload", upload.array("images"), async (req, res) => {
       await res.save();
     });
   }
+  // GENERATE THUMBNAILS
+  if(shopId || isMainImage == "true") {
+    try {
+      sharp(req.files[0].path)
+        .resize(100, 100)
+        .toFile("./public/images/thumbnails/thumb" + imageNames[0]);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  // SAVE IMAGE OBJECT
   imageNames.forEach(async (element) => {
     if (element && element != "") {
       let img = new Image();

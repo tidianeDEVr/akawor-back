@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { Shop, User, Social, Category } = require("../models/");
+const { generateSlug } = require('../services/util-service');
 
 // FIND ACTIVES
 router.get("/find-actives", async (req, res) => {
-  const shops = await Shop.findAll();
+  const shops = await Shop.findAll({where:{shopState: 'ONLINE'}});
   if (shops) return res.send(shops);
   res.send({ message: "shops not found" });
 });
@@ -43,7 +44,16 @@ router.get("/find-by-slug/:slug", async (req, res) => {
 });
 // FIND ALL
 router.get("/find-all", async (req, res) => {
-  Shop.findAll({})
+  Shop.findAll({
+    include: [
+      {
+        model: Category,
+      },
+      {
+        model: User,
+      },
+    ],
+  })
     .then((shops) => {
       return res.status(200).json(shops);
     })
@@ -79,7 +89,7 @@ router.put("/update", async (req, res) => {
       .then((res) => {
         if (res) {
           res.shopLibelle = shop.shopLibelle;
-          res.shopSlug = shop.shopSlug;
+          res.shopSlug = generateSlug(shop.shopLibelle);
           res.shopAddress = shop.shopAddress;
           res.shopDescription = shop.shopDescription;
           res.shopLatitude = shop.shopLatitude;

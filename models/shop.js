@@ -12,13 +12,17 @@ module.exports = (sequelize, DataTypes) => {
         shopSlug: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: 'Boutique-' + Date.now(),
+            defaultValue: 'boutique-' + Date.now(),
             validate: {
                 notEmpty: true
             }
         },
         shopAddress: {
             type: DataTypes.TEXT,
+        },
+        shopState: {
+            type: DataTypes.STRING,
+            defaultValue: 'ONLINE',
         },
         shopDescription: {
             type: DataTypes.STRING(600),
