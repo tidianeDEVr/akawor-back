@@ -4,18 +4,19 @@ const { Wishlist, Product, Shop, Category } = require("../models/");
 const { checkProductBeforeInsert } = require("../services/product-service");
 const _ = require("lodash");
 const { generateSlug } = require('../services/util-service');
-const { TOKEN_LABEL } = require("../env");
 const passport = require("passport");
 
 // CREATE PRODUCT
 router.post("/insert", 
-passport.authenticate(TOKEN_LABEL, { session: false }),
+// passport.authenticate('jwt', { session: false }),
 async (req, res) => {
   if (!checkProductBeforeInsert)
     return res.status(400).send({ message: "missing data!" });
   const {
     productTitle,
     productPrice,
+    productWeight,
+    productStock,
     productDescription,
     productCategory,
     productFeatures,
@@ -27,6 +28,8 @@ async (req, res) => {
   let productObject = await Product.create({
     productTitle,
     productPrice,
+    productWeight,
+    productStock,
     productDescription,
     productCategory,
     productFeatures,
@@ -95,7 +98,7 @@ router.get('/find-recents', async (req, res) => {
 })
 // FIND ALL
 router.get("/find-all", async (req, res) => {
-  Product.findAll({})
+  Product.findAll({include: [{model: Shop}]})
     .then((products) => {
       return res.status(200).json(products);
     })
@@ -105,7 +108,7 @@ router.get("/find-all", async (req, res) => {
 });
 // FIND ALL DASHBOARD
 router.get("/find-all/dashboard", 
-passport.authenticate(TOKEN_LABEL, { session: false }),
+// passport.authenticate('jwt', { session: false }),
 async (req, res) => {
   Product.findAll({
     include: [
@@ -217,7 +220,6 @@ router.put("/update", async (req, res) => {
       if (!product) {
         return res.status(404).json({ message: "Produit introuvable" });
       }
-
       product
         .update({
           ...product,

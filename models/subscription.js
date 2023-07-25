@@ -13,9 +13,5 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true
     });
 
-    // Subscription.associate = (models) => {
-    //     Subscription.belongsTo(models.Subscription);
-    // };
-
     return Subscription; 
 }

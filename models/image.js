@@ -4,9 +4,6 @@ module.exports = (sequelize, DataTypes) => {
         imageTitle: {
             type: DataTypes.STRING,
             allowNull: true,
-            // validate: {
-            //     notEmpty: true
-            // }
         },
     });
 

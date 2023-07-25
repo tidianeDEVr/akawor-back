@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const { Op } = require("sequelize");
 const { User } = require('../models/')
 
 // FIND ALL
@@ -11,6 +12,17 @@ router.get('/find-all', async (req, res) => {
     .catch((error) => {
         return res.status(400).json(error)
     });
+})
+
+// FIND ALL
+router.get('/find-all-dashboard', async (req, res) => {
+  User.findAll({ where:{userRole:{[Op.ne]:'ROLE_ADMIN'}}})
+  .then((users) => {
+      return res.status(200).json(users)
+  })
+  .catch((error) => {
+      return res.status(400).json(error)
+  });
 })
 
 // FIND BY ID

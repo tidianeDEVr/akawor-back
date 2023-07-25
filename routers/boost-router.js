@@ -2,12 +2,11 @@ const express = require("express");
 const router = express.Router();
 const { Boost } = require("../models/");
 const passport = require("passport");
-const { TOKEN_LABEL } = require("../env");
 
 // FIND ALL
 router.get(
   "/find-all",
-  passport.authenticate(TOKEN_LABEL, { session: false }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     Boost
       .findAll({})

@@ -4,11 +4,22 @@ module.exports = (sequelize, DataTypes) => {
         orderStatus: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: {
-                notEmpty: true
-            }
+            defaultValue: "AWAITING"
         },
+        orderIsPayed: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+
+    },
+    {
+        paranoid: true
     });
     
+    Order.associate = (models) => {
+        Order.belongsTo(models.User),
+        Order.hasOne(models.OrderLine)
+    }
+
     return Order; 
 }

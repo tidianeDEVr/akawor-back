@@ -2,12 +2,18 @@ const express = require("express");
 const router = express.Router();
 const { Image, Shop, Product } = require("../models/");
 const path = require("path");
+const fs = require('fs')
 const sharp = require("sharp");
 const multer = require("multer");
 let imageNames = [];
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, "./public/images/");
+    const folder = req.body.folder;
+    if(!folder) return callback(null, `./public/images/`);
+    if (!fs.existsSync(`./public/images/${folder}`)){
+      fs.mkdirSync(`./public/images/${folder}`, { recursive: true });
+    }
+    callback(null, `./public/images/${folder}`);
   },
   filename: (req, file, callback) => {
     const imageName =
@@ -27,7 +33,6 @@ router.post("/upload", upload.array("images"), async (req, res) => {
   const productId = req.query.product;
   const shopId = req.query.shop;
   const isMainImage = req.query.mainImage;
-  console.log(isMainImage);
   let productObject;
   if (productId && productId != 0) {
     await Product.findOne({ where: { id: productId } }).then(async (res) => {
@@ -45,14 +50,18 @@ router.post("/upload", upload.array("images"), async (req, res) => {
     });
   }
   // GENERATE THUMBNAILS
-  if(shopId || isMainImage == "true") {
-    try {
-      sharp(req.files[0].path)
-        .resize(100, 100)
-        .toFile("./public/images/thumbnails/thumb" + imageNames[0]);
-    } catch (error) {
-      console.error(error);
+  try {
+    if(shopId || isMainImage == "true") {
+      try {
+        sharp(req.files[0].path)
+          .resize(100, 100)
+          .toFile("./public/images/thumbnails/thumb" + imageNames[0]);
+      } catch (error) {
+        console.error(error);
+      }
     }
+  } catch (error) {
+    console.log(error);
   }
   // SAVE IMAGE OBJECT
   imageNames.forEach(async (element) => {
@@ -63,6 +72,10 @@ router.post("/upload", upload.array("images"), async (req, res) => {
       await img.save();
     }
   });
+  if(req.body.folder == 'banners')  {
+    res.send(imageNames[0]);
+    return imageNames = [];
+  }
   imageNames = [];
   res.send({ message: "uploaded successfully" });
 });

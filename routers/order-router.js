@@ -2,6 +2,12 @@ const express = require('express')
 const router = express.Router()
 const { Order } = require('../models/')
 
+// INSERT
+router.post('/insert', async (req, res) => {
+  var order = new Order()
+  await order.save();
+  res.send(await order.save());
+})
 
 // FIND ALL
 router.get('/find-all', async (req, res) => {

@@ -47,47 +47,47 @@ const categoriesProductsFixtures = [
 ]
 const categoriesShopsFixtures = [
   {
-    libelle: 'Multimédia',
+    libelle: 'Boutiques Multimédia',
     icon: 'fa-solid fa-desktop'
   },
   {
-    libelle: 'Mobilier & éléctroménager',
+    libelle: 'Boutiques Mobilier & éléctroménager',
     icon: 'fa-solid fa-couch'
   },
   {
-    libelle: 'Mode & beauté',
+    libelle: 'Boutiques Mode & beauté',
     icon: 'fa-solid fa-shirt'
   },
   {
-    libelle: 'Sociétés de services',
+    libelle: 'Boutiques Sociétés de services',
     icon: 'fa-solid fa-person-digging'
   },
   {
-    libelle: 'Produits alimentaires',
+    libelle: 'Boutiques Produits alimentaires',
     icon: 'fa-solid fa-cookie-bite'
   },
   {
-    libelle: 'Concessionnaires',
+    libelle: 'Boutiques Concessionnaires',
     icon: 'fa-solid fa-car'
   },
   {
-    libelle: 'Matériaux & bricolage',
+    libelle: 'Boutiques Matériaux & bricolage',
     icon: 'fa-solid fa-toolbox'
   },
   {
-    libelle: 'Agences immobilières',
+    libelle: 'Boutiques Agences immobilières',
     icon: 'fa-solid fa-building'
   },
   {
-    libelle: 'Accessoires auto moto',
+    libelle: 'Boutiques Accessoires auto moto',
     icon: 'fa-solid fa-car-battery'
   },
   {
-    libelle: 'Agricoles et alimentaires',
+    libelle: 'Boutiques Agricoles et alimentaires',
     icon: 'fa-solid fa-wheat-awn'
   },
   {
-    libelle: 'Sports, loisirs & voyages',
+    libelle: 'Boutiques Sports, loisirs & voyages',
     icon: 'fa-solid fa-person-swimming'
   },
 ]

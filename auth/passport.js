@@ -3,7 +3,7 @@ const passportJwt = require("passport-jwt");
 const config = require("../config/config.json");
 const ExtractJwt = passportJwt.ExtractJwt;
 const StrategyJwt = passportJwt.Strategy;
-const { user } = require("../models/");
+const { User } = require("../models/");
 
 passport.use(
   new StrategyJwt({
@@ -11,7 +11,8 @@ passport.use(
     secretOrKey: config.JWT_SECRET,
   },
   (jwtPayload, done) => {
-    return user
+    console.log(jwtPayload);
+    return User
       .findOne({ where: { id: jwtPayload.id } })
       .then((user) => {
         return done(null, user);

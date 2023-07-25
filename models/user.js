@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true
             }
         },
+        userState: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
+        },
         userBirthday: {
             type: DataTypes.DATE,
             allowNull: true,
@@ -85,6 +89,10 @@ module.exports = (sequelize, DataTypes) => {
     {
         paranoid: true
     });
+
+    User.associate = (models) => {
+        User.hasMany(models.Review);
+    };
 
     return User; 
 }

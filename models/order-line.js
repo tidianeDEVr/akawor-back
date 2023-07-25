@@ -1,14 +1,14 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
     const OrderLine = sequelize.define('OrderLine', {
-        orderLineProductQty: {
+        orderLineJsonCart: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
                 notEmpty: true
             }
         },
-        orderLinePrice: {
+        orderLineTotalPrice: {
             type: DataTypes.INTEGER,
             allowNull: false,
             validate: {

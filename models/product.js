@@ -25,6 +25,16 @@ module.exports = (sequelize, DataTypes) => {
         productPricePromo: {
             type: DataTypes.INTEGER,
         },
+        productStock: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+        },
+        productWeight: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+            defaultValue: 0,
+        },
         productDescription: {
             type: DataTypes.TEXT,
             allowNull: true,
@@ -41,21 +51,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
-        productIsPublish: {
+        productIsOnline: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
-            validate: {
-                notEmpty: true
-            }
-        },
-        productIsOutOfStock: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false,
-            validate: {
-                notEmpty: true
-            }
         },
     }, 
     {
@@ -66,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
         Product.belongsTo(models.Shop);
         Product.belongsTo(models.Category);
         Product.hasMany(models. Boost);
-        Product.hasMany(models.Image)
+        Product.hasMany(models.Image);
     };
 
     return Product; 

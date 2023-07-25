@@ -6,9 +6,11 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser')
 const boostRouter = require('./routers/boost-router');
+const reviewRouter = require('./routers/review-router');
 const categoryRouter = require('./routers/category-router');
 const deliveryRouter = require('./routers/delivery-router');
 const imageRouter = require('./routers/image-router');
+const bannerRouter = require('./routers/banner-router');
 const orderlineRouter = require('./routers/order-line-router');
 const orderRouter = require('./routers/order-router');
 const packRouter = require('./routers/pack-router');
@@ -34,9 +36,11 @@ app.use(express.static('public'));
 
 // ROUTES
 app.use(`/${ACTIVE_VERSION}/api/boost`, boostRouter)
+app.use(`/${ACTIVE_VERSION}/api/review`, reviewRouter)
 app.use(`/${ACTIVE_VERSION}/api/category`, categoryRouter)
 app.use(`/${ACTIVE_VERSION}/api/delivery`, deliveryRouter)
 app.use(`/${ACTIVE_VERSION}/api/image`, imageRouter)
+app.use(`/${ACTIVE_VERSION}/api/banner`, bannerRouter)
 app.use(`/${ACTIVE_VERSION}/api/orderline`, orderlineRouter)
 app.use(`/${ACTIVE_VERSION}/api/order`, orderRouter)
 app.use(`/${ACTIVE_VERSION}/api/pack`, packRouter)

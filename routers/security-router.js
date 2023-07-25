@@ -62,14 +62,14 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const errorMessage = "Email or password does not match !";
   if (!checkUserAttrsOnLogin(req.body))
-    return res.status(500).send({ message: "Missing data" });
+    return res.send({ message: "Missing data !" });
   const { userEmail, userPassword } = req.body;
   const userWithEmail = await User
     .findOne({ where: { userEmail } })
     .catch((err) => {
       console.log(err);
     });
-  if (!userWithEmail) return res.status(401).send({ message: errorMessage });
+  if (!userWithEmail) return res.send({ message: errorMessage });
   decryptPassword(userPassword, userWithEmail.userPassword).then((bool) => {
     if (bool) {
       const jwtToken = jwt.sign(
@@ -82,10 +82,14 @@ router.post("/login", async (req, res) => {
       }); // max age : 2 days
       res.json({ message: "success", role: userWithEmail.userRole });
     } else {
-      return res.status(401).send({ message: errorMessage });
+      return res.send({ message: errorMessage });
     }
   });
 });
+
+router.get('/login/google', async (req, res)=>{
+  res.redirect('http://localhost:4200/')
+})
 
 // GET AUTHENTICATED USER
 router.get("/user", async (req, res) => {
