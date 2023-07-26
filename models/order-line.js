@@ -4,9 +4,7 @@ module.exports = (sequelize, DataTypes) => {
         orderLineJsonCart: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: {
-                notEmpty: true
-            }
+            type: DataTypes.STRING(8000),
         },
         orderLineTotalPrice: {
             type: DataTypes.INTEGER,

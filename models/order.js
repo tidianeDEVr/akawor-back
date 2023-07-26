@@ -1,6 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
     const Order = sequelize.define('Order', {
+        orderReference: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: `COMMAND-${new Date().getTime()}`
+        },
         orderStatus: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -10,7 +15,30 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
-
+        orderDescription: {
+            type: DataTypes.STRING
+        },
+        orderClientPhoneNumber: {
+            type: DataTypes.STRING
+        },
+        orderClientEmail: {
+            type: DataTypes.STRING
+        },
+        orderClientFirstName: {
+            type: DataTypes.STRING
+        },
+        orderClientLastName: {
+            type: DataTypes.STRING
+        },
+        orderClientCity: {
+            type: DataTypes.STRING
+        },
+        orderClientCountry: {
+            type: DataTypes.STRING
+        },
+        orderClientAddress: {
+            type: DataTypes.STRING
+        },
     },
     {
         paranoid: true

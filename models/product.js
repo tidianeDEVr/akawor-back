@@ -38,9 +38,6 @@ module.exports = (sequelize, DataTypes) => {
         productDescription: {
             type: DataTypes.TEXT,
             allowNull: true,
-            validate: {
-                notEmpty: true
-            }
         },
         productState: {
             type: DataTypes.STRING,
@@ -64,6 +61,7 @@ module.exports = (sequelize, DataTypes) => {
     Product.associate = (models) => {
         Product.belongsTo(models.Shop);
         Product.belongsTo(models.Category);
+        Product.belongsTo(models.Wishlist)
         Product.hasMany(models. Boost);
         Product.hasMany(models.Image);
     };

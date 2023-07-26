@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 
     Wishlist.associate = (models) => {
         Wishlist.belongsTo(models.User);
-        Wishlist.hasMany(models.Product)
+        Wishlist.belongsTo(models.Product)
     };
     
     return Wishlist; 
