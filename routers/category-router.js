@@ -47,47 +47,47 @@ const categoriesProductsFixtures = [
 ]
 const categoriesShopsFixtures = [
   {
-    libelle: 'Boutiques Multimédia',
+    libelle: 'Multimédia',
     icon: 'fa-solid fa-desktop'
   },
   {
-    libelle: 'Boutiques Mobilier & éléctroménager',
+    libelle: 'Mobilier & éléctroménager',
     icon: 'fa-solid fa-couch'
   },
   {
-    libelle: 'Boutiques Mode & beauté',
+    libelle: 'Mode & beauté',
     icon: 'fa-solid fa-shirt'
   },
   {
-    libelle: 'Boutiques Sociétés de services',
+    libelle: 'Sociétés de services',
     icon: 'fa-solid fa-person-digging'
   },
   {
-    libelle: 'Boutiques Produits alimentaires',
+    libelle: 'Produits alimentaires',
     icon: 'fa-solid fa-cookie-bite'
   },
   {
-    libelle: 'Boutiques Concessionnaires',
+    libelle: 'Concessionnaires',
     icon: 'fa-solid fa-car'
   },
   {
-    libelle: 'Boutiques Matériaux & bricolage',
+    libelle: 'Matériaux & bricolage',
     icon: 'fa-solid fa-toolbox'
   },
   {
-    libelle: 'Boutiques Agences immobilières',
+    libelle: 'Agences immobilières',
     icon: 'fa-solid fa-building'
   },
   {
-    libelle: 'Boutiques Accessoires auto moto',
+    libelle: 'Accessoires auto moto',
     icon: 'fa-solid fa-car-battery'
   },
   {
-    libelle: 'Boutiques Agricoles et alimentaires',
+    libelle: 'Agricoles et alimentaires',
     icon: 'fa-solid fa-wheat-awn'
   },
   {
-    libelle: 'Boutiques Sports, loisirs & voyages',
+    libelle: 'Sports, loisirs & voyages',
     icon: 'fa-solid fa-person-swimming'
   },
 ]
@@ -152,7 +152,7 @@ router.post('/insert', async(req, res)=> {
   toInsert.categorySlug = generateSlug(category.categoryLibelle)
   toInsert.categoryType = category.categoryType;
   if(category.categoryIconClass) toInsert.categoryIconClass = category.categoryIconClass;
-  if(parentCat) toInsert.categoryParentId = category.categoryParentId;
+  if(parentCat) toInsert.categoryParentId = parentCat.categoryParentId;
   await toInsert.save();
   res.send(toInsert);
 })

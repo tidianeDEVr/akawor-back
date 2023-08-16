@@ -14,7 +14,7 @@ router.get('/find-all', async (req, res) => {
     });
 })
 
-// FIND ALL
+// FIND ALL DASHBOARD
 router.get('/find-all-dashboard', async (req, res) => {
   User.findAll({ where:{userRole:{[Op.ne]:'ROLE_ADMIN'}}})
   .then((users) => {
@@ -23,6 +23,21 @@ router.get('/find-all-dashboard', async (req, res) => {
   .catch((error) => {
       return res.status(400).json(error)
   });
+})
+
+// FIND RECENTS
+router.get('/find-recent-clients', async (req, res) => {
+  User.findAll({
+    limit: 10,
+    order: [[ 'createdAt', 'DESC' ]],
+    where: {userRole: 'ROLE_CLIENT'}
+  })
+    .then((users) => {
+      return res.status(200).json(users);
+    })
+    .catch((error) => {
+      return res.status(400).json(error);
+    });
 })
 
 // FIND BY ID

@@ -1,6 +1,10 @@
 module.exports = {
     generateSlug: function generateSlug(libelle) {
-        var first = libelle.replaceAll(' ','-').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        return first.toLowerCase();
+        const notAllowed = [",", "*", "'", "$", "%", "ù", ";", "|", "@", "#", " ", "+", "="]
+        var slug;
+        notAllowed.map(function(item){
+            slug = libelle.replaceAll(item, '-').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        });
+        return slug.toLowerCase();
     }
 }

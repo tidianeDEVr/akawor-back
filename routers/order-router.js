@@ -4,12 +4,6 @@ const { Order, OrderLine, User } = require("../models/");
 
 // INSERT
 router.post("/insert", async (req, res) => {
-  // var order = new Order()
-  // await order.save();
-  // res.send(await order.save());
-  // orderStatus?: string;
-  // orderOwner?: USER;
-  // orderLine?: ORDER_LINE;
   const {
     orderIsPayed,
     orderDescription,
@@ -40,6 +34,7 @@ router.post("/insert", async (req, res) => {
       }
     );
   }
+  if(orderDescription) orderToAdd.orderDescription = orderDescription;
   orderToAdd.orderClientPhoneNumber = orderClientPhoneNumber;
   orderToAdd.orderClientEmail = orderClientEmail;
   orderToAdd.orderClientFirstName = orderClientFirstName;
@@ -76,7 +71,7 @@ router.get('/client/:email', async (req, res) => {
 
 // FIND ALL
 router.get("/find-all", async (req, res) => {
-  Order.findAll({})
+  Order.findAll({include:[{model:OrderLine}]})
     .then((orders) => {
       return res.status(200).json(orders);
     })
@@ -84,6 +79,21 @@ router.get("/find-all", async (req, res) => {
       return res.status(400).json(error);
     });
 });
+
+// FIND RECENTS
+router.get('/find-recents', async (req, res) => {
+  Order.findAll({
+    limit: 10,
+    order: [[ 'createdAt', 'DESC' ]],
+    include: [{model: OrderLine}]
+  })
+    .then((orders) => {
+      return res.status(200).json(orders);
+    })
+    .catch((error) => {
+      return res.status(400).json(error);
+    });
+})
 
 // FIND BY ID
 router.get("/find-by-id", async (req, res) => {

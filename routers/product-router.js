@@ -20,10 +20,11 @@ async (req, res) => {
     productDescription,
     productCategory,
     productFeatures,
+    productState
   } = req.body.product;
   const productOwnerId = req.body.productOwnerId;
   let isProductExist = await Product.findOne({ where: { productTitle } });
-  if (isProductExist) return res.status(401).send({ message: "already exit" });
+  if (isProductExist) return res.status(401).send({ message: "already exist" });
 
   let productObject = await Product.create({
     productTitle,
@@ -33,6 +34,7 @@ async (req, res) => {
     productDescription,
     productCategory,
     productFeatures,
+    productState
   });
   const ownerShop = await Shop.findOne({ where: { userId: productOwnerId } });
   const categ = await Category.findOne({ where: { id: productCategory.id } });
@@ -57,7 +59,7 @@ router.get("/seller/:id", async (req, res) => {
 router.get("/find-by-shop/:id", async (req, res) => {
   const id = req.params.id;
   if (!id) return res.send({ message: "missing data" });
-  let products = await Product.findAll({ where: { shopId: id } });
+  let products = await Product.findAll({ where: { shopId: id, productState: 'ONLINE' } });
   if (products) return res.send(products);
   res.send({ message: "products not found" });
 });
@@ -69,7 +71,7 @@ router.get("/find-by-category/:slug", async (req, res) => {
   if (!category) return res.send({ message: "category not found" });
   let products = await category.getProducts();
   const childCategories = await Category.findAll({
-    where: { categoryParentId: category.id },
+    where: { categoryParentId: category.id, productState: 'ONLINE' },
     include: [
       {
         model: Product,
@@ -83,11 +85,41 @@ router.get("/find-by-category/:slug", async (req, res) => {
   }
   return res.send(products);
 });
+// FIND SAME CATEGORY
+router.get('/find-same-category/:category', async (req, res) => {
+  Product.findAll({
+    where: {CategoryId: req.params.category},
+    order: [['productTitle', 'DESC']],
+    limit: 4,
+    where: {productState: 'ONLINE'}
+  })
+    .then((products) => {
+      return res.status(200).json(products);
+    })
+    .catch((error) => {
+      return res.status(400).json(error);
+    });
+})
+// FIND SAME SHOP
+router.get('/find-same-shop/:shop', async (req, res) => {
+  Product.findAll({
+    where: {ShopId: req.params.shop},
+    limit: 4,
+    where: {productState: 'ONLINE'}
+  })
+    .then((products) => {
+      return res.status(200).json(products);
+    })
+    .catch((error) => {
+      return res.status(400).json(error);
+    });
+})
 // FIND RECENTS
 router.get('/find-recents', async (req, res) => {
   Product.findAll({
     limit: 4,
-    order: [[ 'createdAt', 'DESC' ]]
+    order: [[ 'createdAt', 'DESC' ]],
+    where: {productState: 'ONLINE'}
   })
     .then((products) => {
       return res.status(200).json(products);
@@ -98,7 +130,7 @@ router.get('/find-recents', async (req, res) => {
 })
 // FIND ALL
 router.get("/find-all", async (req, res) => {
-  Product.findAll({include: [{model: Shop}]})
+  Product.findAll({include: [{model: Shop}], where: {productState: 'ONLINE'}})
     .then((products) => {
       return res.status(200).json(products);
     })

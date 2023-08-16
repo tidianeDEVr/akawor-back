@@ -63,13 +63,10 @@ router.get("/find-all", async (req, res) => {
 });
 
 // FIND BY ID
-router.get("/find-by-id", async (req, res) => {
-  Shop.findOne(req.params.id, {})
+router.get("/find-by-id/:id", async (req, res) => {
+  Shop.findByPk(req.params.id)
     .then((shop) => {
-      if (!shop) {
-        return res.status(404).json({ message: "Boutique introuvable" });
-      }
-
+      if (!shop) return res.status(404).json({ message: "Boutique introuvable" });
       return res.status(200).json(shop);
     })
     .catch((error) => {

@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: 'DRAFT',
         },
         productFeatures: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(3000),
             allowNull: true,
         },
         productIsOnline: {
