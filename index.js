@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.urlencoded({extended:true}));
-app.use(cors({credentials: true, origin: ['http://localhost:4200'],}))
+app.use(cors({credentials: true, origin: ['http://localhost:4200', 'https://akawor.com', 'https://www.akawor.com'],}))
 app.use(helmet({crossOriginResourcePolicy: false}));
 app.use(cookieParser());
 app.use(express.static('public'));

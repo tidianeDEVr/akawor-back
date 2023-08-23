@@ -71,7 +71,7 @@ router.get("/find-by-category/:slug", async (req, res) => {
   if (!category) return res.send({ message: "category not found" });
   let products = await category.getProducts();
   const childCategories = await Category.findAll({
-    where: { categoryParentId: category.id, productState: 'ONLINE' },
+    where: { categoryParentId: category.id, },
     include: [
       {
         model: Product,
@@ -83,7 +83,11 @@ router.get("/find-by-category/:slug", async (req, res) => {
       products = _.union(products, elt.Products);
     });
   }
-  return res.send(products);
+  var activeProducts = [];
+  products.forEach(elt => {
+    if(elt.productState =='ONLINE') activeProducts.push(elt);
+  })
+  return res.send(activeProducts);
 });
 // FIND SAME CATEGORY
 router.get('/find-same-category/:category', async (req, res) => {

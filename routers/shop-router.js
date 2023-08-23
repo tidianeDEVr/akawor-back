@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Shop, User, Social, Category } = require("../models/");
 const { generateSlug } = require('../services/util-service');
+const _ = require("lodash");
 
 // FIND ACTIVES
 router.get("/find-actives", async (req, res) => {
@@ -61,7 +62,28 @@ router.get("/find-all", async (req, res) => {
       return res.status(400).json(error);
     });
 });
-
+// FIND BY CATEGORY
+router.get("/find-by-category/:slug", async (req, res) => {
+  const slug = req.params.slug;
+  if (!slug) return res.send({ message: "missing data" });
+  const category = await Category.findOne({ where: { categorySlug: slug } });
+  if (!category) return res.send({ message: "category not found" });
+  let shops = await category.getShops();
+  const childCategories = await Category.findAll({
+    where: { categoryParentId: category.id, },
+    // include: [
+    //   {
+    //     model: Product,
+    //   },
+    // ],
+  });
+  if (childCategories.length > 0) {
+    childCategories.forEach((elt) => {
+      shops = _.union(shops, elt.shops);
+    });
+  }
+  return res.send(shops);
+});
 // FIND BY ID
 router.get("/find-by-id/:id", async (req, res) => {
   Shop.findByPk(req.params.id)
