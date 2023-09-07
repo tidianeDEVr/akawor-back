@@ -5,7 +5,6 @@ const { Order, OrderLine, User } = require("../models/");
 // INSERT
 router.post("/insert", async (req, res) => {
   const {
-    orderIsPayed,
     orderDescription,
     orderClientPhoneNumber,
     orderClientEmail,
@@ -30,7 +29,7 @@ router.post("/insert", async (req, res) => {
   if (orderClientEmail) {
     await User.findOne({ where: { userEmail: orderClientEmail } }).then(
       (res) => {
-        if(res.id) orderToAdd.UserId = res.id;
+        if(res && res.id) orderToAdd.UserId = res.id;
       }
     );
   }
@@ -68,7 +67,17 @@ router.get('/client/:email', async (req, res) => {
     res.send(orders)
   })
 })
-
+// CONFIRM PAYMENTS
+router.get('/confirm', async (req, res) => {
+  const ref = req.query.ref;
+  if(!ref) return res.status(500).send('missing data !');
+  let order = await Order.findOne({where: {orderReference : ref}});
+  if(order) {
+    order.orderIsPayed = true;
+    await order.save();
+  }
+  return res.redirect('http://localhost:4200/');
+})
 // FIND ALL
 router.get("/find-all", async (req, res) => {
   Order.findAll({include:[{model:OrderLine}]})

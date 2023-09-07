@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         orderStatus: {
             type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: "AWAITING"
+            defaultValue: "SUBMITTED"
         },
         orderIsPayed: {
             type: DataTypes.BOOLEAN,
