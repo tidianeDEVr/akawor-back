@@ -10,10 +10,10 @@ router.post("/paytech", async (req, res) => {
   if (req.body.currency == "XOF") item_price = req.body.amount * EUR_TO_XOF;
   let params = {
     item_name: "Commande",
-    // item_price: item_price,
-    // currency: req.body.currency,
-    item_price: 100,
-    currency: "XOF",
+    item_price: item_price,
+    currency: req.body.currency,
+    // item_price: 100,
+    // currency: "XOF",
     ref_command: `akawor-${new Date()}`,
     command_name: "Paiement via PayTech",
     env: "test",

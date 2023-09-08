@@ -40,7 +40,8 @@ app.use(
     ],
   })
 );
-app.use(helmet({ crossOriginResourcePolicy: false }));
+// app.use(helmet({ crossOriginResourcePolicy: false }));
+app.use(helmet());
 app.use(cookieParser());
 app.use(express.static("public"));
 
